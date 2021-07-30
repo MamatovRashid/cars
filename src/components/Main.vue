@@ -3,9 +3,9 @@
       <div class="container">
           <div class="box" :style=" { 'background-image' : 'url(' + carImg + ')' } ">
               <h1 v-html="dollar+price"></h1>
-              <p>Las Vega, NV</p>
+              <p>Las Vega, NV {{weather.name}} </p>
               <div class="buttonbox">
-                  <button>
+                  <button @click="fetchA">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M12 19V5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                         <path d="M5 12L12 5L19 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -31,9 +31,25 @@ export default {
             id: 1,
             carImg: '/img/car1.ec7686d3.png',
             dollar: '&dollar;',
-            price: '1,250,560'
+            price: '1,250,560',
+            api_key: '6a70a3aac4ef05f5fb08fb50e4c1b7d5',
+            url_base: 'https://api.openweathermap.org/data/2.5/',
+            weather: {}
         }
     },
+    methods: {
+        fetchA () {
+            
+            fetch(`${this.url_base}weather?q=London&appid=${this.api_key}`)
+            .then(res => {
+                return res.json();
+            }).then(this.setResults);
+        },
+        setResults (results) {
+            this.weather = results;
+            console.log(this.weather);
+        }
+    }
 }
 </script>
 <style scoped>
@@ -42,6 +58,7 @@ export default {
         width: 100%;
         padding: 15px 0;
         height: calc(100vh - 96px - 92px);
+        min-height: 300px;
         background-repeat: no-repeat;
         background-position: center center;
     }
